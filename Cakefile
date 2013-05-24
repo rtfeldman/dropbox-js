@@ -118,6 +118,17 @@ task 'chrometest2', ->
         testChromeApp ->
           process.exit 0
 
+task 'firefox', ->
+  vendor ->
+    build ->
+      buildFirefoxAddon()
+
+task 'firefoxtest', ->
+  vendor ->
+    build ->
+      tokens ->
+        testFirefoxAddon()
+
 task 'cordova', ->
   platform = process.env['CORDOVA_PLATFORM'] or 'android'
   vendor ->
@@ -245,6 +256,23 @@ chromeCommand = ->
   else
     'google-chrome'
 
+buildFirefoxAddon = (callback) ->
+  # copy the library into the addon directory
+  run "cp lib/dropbox.js test/firefox_addon/lib/dropbox.js", ->
+    run "cd test/firefox_addon && cfx run", ->
+      callback() if callback
+
+testFirefoxAddon = (callback) ->
+  # get the logged in tokens
+  savedTokens = fs.readFileSync 'test/token/token.json'.toString()
+  # use the sandbox tokens
+  token = JSON.stringify(JSON.parse(savedTokens.toString()).sandbox)
+  # copy the library file
+  run "cp lib/dropbox.js test/firefox_addon/lib/dropbox.js", ->
+    # run cfx tests with static args
+    run "cd test/firefox_addon && cfx test --static-args='" + token + "'", ->
+      callback() if callback
+
 testCordovaApp = (platform, callback) ->
   run 'cd test/cordova_app && ../../node_modules/cordova/bin/cordova ' +
       " run #{platform}", ->
@@ -257,7 +285,7 @@ scaffoldCordovaApp = (platform, callback) ->
     else
       run 'node_modules/cordova/bin/cordova create test/cordova_app ' +
           'com.dropbox.js.tests "DropboxJsTests"', ->
-        step2()
+            step2()
   step2 = ->
     commands = []
     unless fs.existsSync(
