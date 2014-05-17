@@ -1,8 +1,8 @@
 if typeof global isnt 'undefined' and typeof module isnt 'undefined' and
     'exports' of module
-  # Running inside node.js.
+  # Running inside node.js or browserify
   DbxEnvGlobal = global
-  DbxEnvRequire = module.require.bind module
+  DbxEnvRequire = require.bind module
   module.exports = Dropbox
 
 else if typeof window isnt 'undefined' and typeof navigator isnt 'undefined'
