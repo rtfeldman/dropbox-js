@@ -1,25 +1,35 @@
+DbxXhrIeMode = false
+DbxXhrDoesPreflight = false
+DbxXhrCanSendForms = false
+
+# add unused call to require sdk/net/xhr
+# to trigger inclusion of the module in the Firefox add-on SDK
+if false
+  require('sdk/net/xhr')
+
 if Dropbox.Env.global.XMLHttpRequest
   # Browser or Web Worker.
   if Dropbox.Env.global.XDomainRequest and
       not ('withCredentials' of new XMLHttpRequest())
-    DbxXhrRequest = XDomainRequest
+    DbxXhrRequest = Dropbox.Env.global.XDomainRequest
     DbxXhrIeMode = true
     # IE's XDR doesn't allow setting requests' Content-Type to anything other
     # than text/plain, so it can't send _any_ forms.
     DbxXhrCanSendForms = false
   else
-    DbxXhrRequest = XMLHttpRequest
-    DbxXhrIeMode = false
+    DbxXhrRequest = Dropbox.Env.global.XMLHttpRequest
     # Web Workers don't support FormData at all.
     # Also, Firefox doesn't support adding named files to FormData.
     # https://bugzilla.mozilla.org/show_bug.cgi?id=690659
     DbxXhrCanSendForms = typeof FormData isnt 'undefined' and
       navigator.userAgent.indexOf('Firefox') is -1
   DbxXhrDoesPreflight = true
+else if Dropbox.Env.tryRequire('sdk/net/xhr')
+  DbxXhrRequest = Dropbox.Env.require_ 'sdk/net/xhr'
+  DbxXhrIeMode = false
 else
   # Node.js.
-  DbxXhrRequest = Dropbox.Env.require 'xhr2'  # We need an XHR emulation.
-  DbxXhrIeMode = false
+  DbxXhrRequest = Dropbox.Env.require_ 'xhr2'  # We need an XHR emulation.
   # Node.js doesn't have FormData. We wouldn't want to bother putting together
   # upload forms in node.js anyway, because it doesn't do CORS preflight
   # checks, so we can use PUT requests without a performance hit.

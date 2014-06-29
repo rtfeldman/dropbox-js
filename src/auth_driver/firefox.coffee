@@ -85,8 +85,8 @@ class Dropbox.AuthDriver.Firefox extends Dropbox.AuthDriver.BrowserBase
 
   # Shows the authorization URL in a tab, waits for it to return to about:blank.
   doAuthorize: (authUrl, token, tokenSecret, callback) ->
-    tabs = require("tabs");
-    data = require("self").data;
+    tabs = require("sdk/tabs");
+    data = require("sdk/self").data;
     tabs.open
       url: authUrl,
       onReady: onReady = (tab) ->

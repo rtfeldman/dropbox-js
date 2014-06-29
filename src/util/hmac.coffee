@@ -30,7 +30,7 @@ do ->
   # SHA1 and HMAC-SHA1 versions that use the node.js builtin crypto.
   if Dropbox.Env.require
     try
-      crypto = Dropbox.Env.require 'crypto'
+      crypto = Dropbox.Env.require_ 'crypto'
       if crypto.createHmac and crypto.createHash
         Dropbox.Util.hmac = (string, key) ->
           hmac = crypto.createHmac 'sha1', key
@@ -45,6 +45,7 @@ do ->
           hash.update string
           hash.digest 'base64'
     catch requireError
+	  console.log 'Failed to require crypto'
       # The slow versions defined at the top of the file work everywhere.
 
   # HMAC-SHA1 implementation.

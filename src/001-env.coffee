@@ -29,7 +29,7 @@ else if typeof self isnt 'undefined'
 # doesn't provide certain APIs (eg. XMLHttpRequest) we'll also need
 # a require() implementation to import a polyfill.
 if typeof DbxEnvGlobal is 'undefined'
-  throw new Error 'dropbox.js loaded in an unsupported JavaScript environment.'
+  DbxEnvGlobal = {}
 
 # Export Dropbox functionality when used in a CommonJS-like
 # module environment
@@ -57,4 +57,21 @@ class Dropbox.Env
   #
   # This is null in the browser. It is aliased to require in node.js and to
   # importScripts in Web Workers.
+  #
+  # Note: This method is named 'require_' to avoid it being detected
+  # by Firefox add-on SDK preprocessing, which will cause it to refuse
+  # to load the Dropbox module if it encounters require() statements
+  # for eg. Node.js modules (even if that code is not actually used).
+  @require_: (moduleName) ->
+    @require(moduleName)
+
+  @tryRequire: (moduleName) ->
+    @require(moduleName)
+    try
+      @require(moduleName)
+      return true
+    catch error
+      console.log 'Failed to tryRequire ' + moduleName
+      return false
+
   @require: DbxEnvRequire

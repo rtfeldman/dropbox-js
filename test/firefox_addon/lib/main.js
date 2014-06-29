@@ -1,7 +1,7 @@
 // include the library
 const Dropbox = require('dropbox');
 // access to the data folder
-const data = require('self').data;
+const data = require('sdk/self').data;
 
 // start the dropbox process
 var client = new Dropbox.Client({

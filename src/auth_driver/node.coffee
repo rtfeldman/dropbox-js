@@ -19,13 +19,13 @@ class Dropbox.AuthDriver.NodeServer
     else
       @_tlsOptions = null
     # Calling require in the constructor because this doesn't work in browsers.
-    @_fs = Dropbox.Env.require 'fs'
-    @_http = Dropbox.Env.require 'http'
-    @_https = Dropbox.Env.require 'https'
-    @_open = Dropbox.Env.require 'open'
+    @_fs = Dropbox.Env.require_ 'fs'
+    @_http = Dropbox.Env.require_ 'http'
+    @_https = Dropbox.Env.require_ 'https'
+    @_open = Dropbox.Env.require_ 'open'
 
     @_callbacks = {}
-    @_nodeUrl = Dropbox.Env.require 'url'
+    @_nodeUrl = Dropbox.Env.require_ 'url'
     @createApp()
 
   # The /authorize response type.
