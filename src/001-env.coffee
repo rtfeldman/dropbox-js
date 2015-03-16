@@ -44,7 +44,7 @@ if typeof self isnt 'undefined' and typeof self.importScripts isnt 'undefined'
   DbxEnvRequire = self.importScripts.bind self
 
 if typeof module isnt 'undefined' and typeof require isnt 'undefined'
-  DbxEnvRequire = require.bind module
+  DbxEnvRequire = require?.bind? module
 
 # Helpers for interacting with the JavaScript environment we run in.
 #
