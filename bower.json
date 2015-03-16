@@ -1,0 +1,24 @@
+{
+  "name": "dropbox",
+  "main": "dropbox",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dropbox/dropbox-js",
+  "authors": [
+    "Victor Costan"
+  ],
+  "description": "Unofficial JavaScript library for the Dropbox Core API. https://www.dropbox.com/developers",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "Dropbox"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
